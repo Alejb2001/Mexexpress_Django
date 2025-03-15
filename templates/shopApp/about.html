@@ -1,0 +1,31 @@
+{% extends 'shopApp/base.html' %}
+{% block content %}
+{% load static %}
+
+<!-- Tabla de contactos -->
+<div class="container my-4">
+    <h2 class="text-center">Contactos</h2>
+    <table class="table table-striped table-bordered">
+        <thead class="">
+            <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Correo electrónico</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for contact in contact_list %}
+            <tr>
+                <td>{{ contact.full_name }}</td>
+                <td>{{ contact.address }}</td>
+                <td>{{ contact.phone }}</td>
+                <td>{{ contact.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
