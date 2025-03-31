@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from shopApp.models import Product, Contact
 from shopApp.forms import formComment, formContact
@@ -69,14 +69,16 @@ def form_comment(request):
     return render(request, "shopApp/form_comment.html", {'form': form})
 
 def form_contact(request):
+    form = formContact()
     if request.method == 'POST':
-        form = formComment(request.POST)
+        form = formContact(request.POST)
         if form.is_valid():
-            new_contact = form.save(commit=False)
-            new_contact.active = True
-            new_contact.save()
+            Contact.objects.create(
+                full_name = form.cleaned_data['full_name'],
+                address = form.cleaned_data['address'],
+                phone = form.cleaned_data['phone'],
+                email = form.cleaned_data['email'],
+                active = True
+            )
             return redirect('about')
-        else:
-            form = formContact()
-        
     return render(request, "shopApp/form_contacts.html", {'form': form})
