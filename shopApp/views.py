@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from shopApp.models import Product, Contact
+from shopApp.forms import formComment, formContact
 
 # Views de index.html
 def index(request):
     product_list = Product.objects.all()
     special_offers = Product.objects.filter(product_is_offer=True)
     my_context = {
-        "user": "guest",
         "message": "Hola",
         "special_offers": special_offers,
         "product_list": product_list,
@@ -55,3 +55,28 @@ def index(request):
 def about(request):
     contact_list = Contact.objects.filter(active=True) 
     return render(request, "shopApp/about.html", {'contact_list': contact_list})
+
+def form_comment(request):
+    form = formComment()
+    if request.method == 'POST':
+        form = formComment(request.POST)
+        if form.is_valid():
+            print('Formulario valido')
+            print('Nombre: ', form.cleaned_data['full_name'])
+            print('Email: ', form.cleaned_data['email'])
+            print('Comentario: ', form.cleaned_data['comment'])
+        
+    return render(request, "shopApp/form_comment.html", {'form': form})
+
+def form_contact(request):
+    if request.method == 'POST':
+        form = formComment(request.POST)
+        if form.is_valid():
+            new_contact = form.save(commit=False)
+            new_contact.active = True
+            new_contact.save()
+            return redirect('about')
+        else:
+            form = formContact()
+        
+    return render(request, "shopApp/form_contacts.html", {'form': form})

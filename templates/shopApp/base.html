@@ -34,21 +34,31 @@
                 
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            {% if user == "guest" %}
-                                Iniciar Sesión
+                        <a class="btn" href="#">
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'logout' %} " class="btn btn-link ms-3 text-light">Hola, {{user.get_username}}</a>
+                                <!--<a onclick="document.getElementById("logout-form").submit();" class="btn btn-link ms-3 text-light">Hola, {{user.get_username}}</a>-->
                             {% else %}
-                                Hola, {{user}}
+                                <a href="{% url 'login' %} " class="btn btn-link ms-3 text-light">Iniciar Sesión</a>
                             {% endif %}
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Carrito</a>
+                        <a class="btn btn-link ms-3 text-light" href="#">Carrito</a>
                     </li>
                 </ul>
+
+                <from id="logout-form" style="display:none;" action="{% url 'logout' %}" method="post">{% csrf_token %}</from>
+
             </div>
         </div>
     </nav>
+
+    {% if user.is_authenticated %}
+
+    {% else %}
+
+    {% endif %}
     
     <!-- Bloque donde se inserta contenido -->
      <div>
